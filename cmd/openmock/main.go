@@ -7,8 +7,9 @@ import (
 )
 
 func main() {
-	s := &app.Server{
-		Addr: ":8080",
+	s, err := app.NewServer()
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	if err := s.Run(); err != nil {
