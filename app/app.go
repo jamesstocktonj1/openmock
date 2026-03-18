@@ -4,12 +4,16 @@ import (
 	"net/http"
 )
 
-type Server struct {
+type Config struct {
 	Addr string
-	mux  *http.ServeMux
 }
 
-func NewServer() (*Server, error) {
+type Server struct {
+	cfg Config
+	mux *http.ServeMux
+}
+
+func NewServer(cfg Config) (*Server, error) {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -18,11 +22,11 @@ func NewServer() (*Server, error) {
 	})
 
 	return &Server{
-		Addr: ":8080",
-		mux:  mux,
+		cfg: cfg,
+		mux: mux,
 	}, nil
 }
 
 func (s *Server) Run() error {
-	return http.ListenAndServe(s.Addr, s.mux)
+	return http.ListenAndServe(s.cfg.Addr, s.mux)
 }
